@@ -7,22 +7,21 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
-#include<vector>
+#include <vector>
 using std::vector;
 #define NUM_OF_EVENTS 500 //设定的epoll事件数为500
 
 class epollEngine
 {
 private:
-    int listenSock = -1;
     int epollfd = -1; 
     vector<epoll_event> eventList; //epoll事件容器
-    int nfds = 0; //当前获得的连接数量
+    int nfds = 0; //当前epoll侦听的fd数量
     int timeout = 300; //epoll_wait的等待时间 
     /*选用多进程的锁机制来避免惊群效应*/
 
 public:
-    epollEngine(int socket);
+    epollEngine();
     bool epollAddEvent(epoll_event ev);
     bool epollDelEvent(epoll_event ev);
     bool epollInit();

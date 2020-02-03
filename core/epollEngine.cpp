@@ -1,27 +1,18 @@
 #include "epollEngine.hpp"
 
-epollEngine::epollEngine(int socket)
+epollEngine::epollEngine()
 {
-        if(socket < 0){
-            //logget::log(ERROR, "epollEnging::epollEngine", "invalid socket");
-        }
-        else{
-            this->listenSock = socket;
-            this->eventList.resize(NUM_OF_EVENTS); //以NUM_OF_EVENTS作为单位对evenList进行扩容
-            epollInit(); // 初始化epoll
-        }
+    this->eventList.resize(NUM_OF_EVENTS); //以NUM_OF_EVENTS作为单位对evenList进行扩容
+    epollInit(); // 初始化epoll
+        
 }
 
 
 bool epollEngine::epollInit()
 {
-    if(this->listenSock < 0){
-        //logget::log(ERROR, "epollEnging::epollInit", "invalid socket");
-        return false;
-    }
     int fd = epoll_create1(0);
     if(fd == -1){
-        //logget::log(SYS_ERROR, "epollEnging::epollInit", "epoll failed");
+        //epoll create failed
         return false;
     }
     this->epollfd = fd;
@@ -42,13 +33,14 @@ void epollEngine::setEpollTimeout(int timeout)
 bool epollEngine::epollAddEvent(epoll_event ev)
 {
     if(this->epollfd < 0){
-        //logget::log(ERROR, "epollEnging::epollAddEvent", "invalid epollfd");
+        //invalid epollfd
         return false;
     }
     if( epoll_ctl(this->epollfd, EPOLL_CTL_ADD, ev.data.fd, &ev) == 0 ){
+        ++this->nfds;
         return true;
     }else{
-         //logget::log(SYS_ERROR, "epollEnging::epollAddEvent", "add-event failed");
+         //add-event failed
          return false;
     }
 }
@@ -56,13 +48,14 @@ bool epollEngine::epollAddEvent(epoll_event ev)
 bool epollEngine::epollDelEvent(epoll_event ev)
 {
     if(this->epollfd < 0){
-        //logget::log(ERROR, "epollEnging::epollAddEvent", "invalid epollfd");
+        //invalid epollfd
         return false;
     }
     if( epoll_ctl(this->epollfd, EPOLL_CTL_DEL, ev.data.fd, &ev) == 0 ){
+        --this->nfds;
         return true;
     }else{
-         //logget::log(SYS_ERROR, "epollEnging::epollAddEvent", "delete-event failed");
+         //delete-event failed
          return false;
     }
 }
@@ -80,7 +73,7 @@ int epollEngine::epollWait()
     int ret = epoll_wait(epollfd, &*eventList.begin(),(int)eventList.size(), this->timeout);
     this->nfds = ret;
         if(ret < 0){
-            //logget::log(SYS_ERROR, "epollEnging::epollWait", "epoll_wait failed");
+            //epoll_wait failed
             return ret;
         }else{
             if( ret == (int)eventList.size() ){
