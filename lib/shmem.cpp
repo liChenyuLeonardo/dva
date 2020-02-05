@@ -2,7 +2,7 @@
 
 
 sharedMemory::sharedMemory(size_t size):
-start(NULL),end(NULL),shmId(-1),isAttached(false),_size(0)
+start(NULL),shmId(-1),isAttached(false),_size(0)
 {
     if(size <= 0){
         //无效的共享内存空间大小
@@ -15,20 +15,19 @@ start(NULL),end(NULL),shmId(-1),isAttached(false),_size(0)
         }
         else{
             start = attach();
-            end = start + _size + 1;
+            memset(start, 0, _size);
         }
     }
 }
 
 sharedMemory::sharedMemory(int shmid, size_t size):
-start(NULL),end(NULL),shmId(-1),isAttached(false),_size(0)
+start(NULL),shmId(-1),isAttached(false),_size(0)
 {
     this->shmId = shmid;
     this->_size = size;
     start = attach();
-    end = start + _size + 1;
 }
-
+/*
 sharedMemory::sharedMemory(size_t size, key_t theKey):
 start(NULL),end(NULL),shmId(-1),isAttached(false),_size(0)
 {
@@ -43,10 +42,11 @@ start(NULL),end(NULL),shmId(-1),isAttached(false),_size(0)
         }
         else{
             start = attach();
+            memset(start, 0, _size);
             end = start + _size + 1;
         }
     }
-}
+}*/
 
 void* sharedMemory::attach()
 {
@@ -67,11 +67,6 @@ void* sharedMemory::getStartAddr()
     return this->start;
 }
 
-void* sharedMemory::getEndAddr()
-{
-    return this->end;
-}
-
 int sharedMemory::getshmId()
 {
     return this->shmId;
@@ -82,6 +77,11 @@ size_t sharedMemory::getSize()
     return this->_size;
 }
 
+bool sharedMemory::isAttach()
+{
+    return this->isAttached;
+}
+
 bool sharedMemory::remove()
 {
     return  shmctl(shmId, IPC_RMID, NULL) == -1 ? false : true;
@@ -90,4 +90,16 @@ bool sharedMemory::remove()
 bool sharedMemory::detach()
 {
     return  shmdt(shmId) == -1 ? false : true;
+}
+
+sharedMemory::~sharedMemory()
+{
+    if(!detach()){
+        //共享内存脱离连接失败
+    }
+    else
+    {
+        //进程（pid为getpid()）已脱离共享内存（shmId为 this->shmId）的连接
+    }
+    
 }
