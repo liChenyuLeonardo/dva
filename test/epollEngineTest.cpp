@@ -34,7 +34,7 @@ int main()
                 int conn_sock = accept(listen_sock, (struct sockaddr *) &addr, &addrlen);
                 if (conn_sock == -1) {
                     perror("accept");
-            .        exit(EXIT_FAILURE);
+                    exit(EXIT_FAILURE);
                 }
                 ioctl(conn_sock, FIONBIO, 1);
                 struct epoll_event ev = test.setEpollEvent(conn_sock, EPOLLIN | EPOLLET);

@@ -4,6 +4,9 @@
 #include <string.h>
 #include <sys/shm.h>
 
+/*#include <iostream>
+using namespace std;*/
+
 #define USER_ALLOWANCE 0660//共享内存段的访问权限，默认是拥有者和同组用户可读可写
 #define PAGE_SIZE getpagesize()
 //用于开辟一块共享内存区域

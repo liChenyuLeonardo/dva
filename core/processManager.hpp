@@ -21,9 +21,8 @@ private:
     bool sendSigSingl(pid_t pid, int signo); 
 public:
     processManager(int processes);
-    processManager();
     //启动所有进程
-    bool launcher(string path, string config); 
+    bool launchAll(string path, string config); 
     //启动一个新进程
     pid_t launchNew(string path, string config); 
     //粗暴地终止所有进程

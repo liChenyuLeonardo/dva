@@ -25,15 +25,18 @@ bool shmMutex::initMutex()
     | ...         |
     */
     buffStart = (void*) (mutex + 1); 
+    return true;
 }
 
 _NONBLOCKING_ bool shmMutex::tryMutex()
 {
+    if(mutex == NULL) return false;
     return sem_trywait(mutex) == -1 ? false : true;
 }
 
 _NONBLOCKING_ bool shmMutex::rlsMutex()
 {
+    if(mutex == NULL) return false;
     return sem_post(mutex) == -1 ? false : true;
 }
 
@@ -48,13 +51,11 @@ void* shmMutex::shmAccess()
 
 bool shmMutex::destroyMutex()
 {
+    if(mutex == NULL) return false;
     return sem_destroy(mutex) == -1 ? false : true;
 }
 
 shmMutex::~shmMutex()
 {
-    if(destroyMutex() == false){
-        //共享内存互斥锁解除失败，可能已经被解除
-    }
-
+    rlsMutex();
 }

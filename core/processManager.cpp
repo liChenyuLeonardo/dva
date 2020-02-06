@@ -3,7 +3,7 @@
 
 processManager::processManager(int processes):procList()
 {
-         this->processes = processes;
+    this->processes = processes;
     if(processes > MAX_PROCESSES){
        isRunnable = false;
        // logger::log(ERROR, "processManager", "exceeded the specified max num of processes");
@@ -13,13 +13,7 @@ processManager::processManager(int processes):procList()
     }
 }
 
-processManager::processManager():procList()
-{
-    isRunnable = true;
-    processes = 4;
-}
-
-bool processManager::launcher(string path, string config)
+bool processManager::launchAll(string path, string config)
 {
     if(!isRunnable){
          cout<< "non-runnable!" <<endl;
@@ -63,7 +57,7 @@ pid_t processManager::launchNew (string path, string config)
             if(execl(path.c_str(), config.c_str()) < 0){
                 //to be done: 这里应该用管道告知父进程子进程出现错误
                      //logger::log(SYS_ERROR, "processManager::launchNew", "exec error")
-                     return -1;
+                     exit(-1);
             }
         }
         else{
@@ -75,6 +69,10 @@ pid_t processManager::launchNew (string path, string config)
 
 bool processManager::sendSigSingl(pid_t pid, int signo)
 {
+    if(procList.searchList(pid) == NULL){
+        //the specified process cannot be found in the process list
+        return false;
+    }
     if(kill(pid, signo) != 0){
         //logger::log(SYS_ERROR, "processManager::sendSig", "sendSig error")
         return false;

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string.h>
-#include "../lib/shmem.hpp"
+#include "../lib/shmMutex.hpp"
 #include <unistd.h>
 #include <sys/wait.h>
 using namespace std;
@@ -10,34 +10,23 @@ struct msg{
 };
 int main()
 {
-    sharedMemory shm(1024);//a sharedMem with the size of 1024 bytes
-    int shmId = shm.getshmId();
-    msg* start = (msg*)shm.getStartAddr();
-    if(start != NULL)
-        cout<< "shm attached at "<< start << endl;
-    else{
-        perror("shm create error");
-        exit(0); 
-    }
-    memset((void*)start, 0, sizeof(msg));
-    int pid = fork();
-    if(pid == 0){
-        start->isWritten = true;
-        strcpy(start->message,"Hello World!\n");
-        shm.detach();
-        exit(0);
-    }
-    else{
-        int status;
-        wait(&status);
-        if(start->isWritten == true){
-            cout<<start->message<<endl;
-        }
-        else{
-            cout<<"error";
-        }
-        shm.detach();
-    }
+    shmMutex haha;
+    fork();
+    fork();
+    void* start = NULL;
     
+    while(start == NULL){
+        start = haha.shmAccess();
+        usleep(700);
+        cout<< "pid " << getpid() << " is requesting for mutex lock" << endl;
+    }
+    cout<<"pid "<< getpid()<< " has acquired the mutex lock" << endl;
+    if(haha.rlsMutex() == false){
+        cout<<"pid "<< getpid()<< " failed in releasing the mutex lock" << endl;
+    }
+    else{
+        cout<<"pid "<< getpid()<< " has released the mutex lock" << endl;
+    }
+    exit(0);    
 
 }

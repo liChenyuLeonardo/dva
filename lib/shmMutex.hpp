@@ -2,6 +2,8 @@
 #define _SHM_MUTEX_HPP_
 #define _NONBLOCKING_
 #include "shmem.hpp"
+#include <semaphore.h>
+
 
 class shmMutex : public sharedMemory
 {

@@ -4,7 +4,6 @@ epollEngine::epollEngine()
 {
     this->eventList.resize(NUM_OF_EVENTS); //以NUM_OF_EVENTS作为单位对evenList进行扩容
     epollInit(); // 初始化epoll
-        
 }
 
 
@@ -16,13 +15,7 @@ bool epollEngine::epollInit()
         return false;
     }
     this->epollfd = fd;
-    epoll_event ev = setEpollEvent(listenSock, EPOLLIN); //侦听socket设为水平触发LT模式，此时侦听socket不必设为非阻塞模式
-    //to be done：初始化锁
-    if(epollAddEvent(ev) == false){ //将侦听socket事件添加到epoll中
-        return false;
-    }else{
-        return true;
-    }
+    return true;
 }
 
 void epollEngine::setEpollTimeout(int timeout)

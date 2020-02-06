@@ -11,11 +11,12 @@ start(NULL),shmId(-1),isAttached(false),_size(0)
         _size = size;
         shmId = shmget(IPC_PRIVATE, _size, IPC_CREAT | IPC_EXCL | USER_ALLOWANCE);
         if(shmId < 0){
-            //开辟共享内存空间失败
+            //cout << "开辟共享内存空间失败" << endl;
         }
         else{
             start = attach();
             memset(start, 0, _size);
+            //cout << "shm attached at " << start << endl;
         }
     }
 }
@@ -89,7 +90,7 @@ bool sharedMemory::remove()
 
 bool sharedMemory::detach()
 {
-    return  shmdt(shmId) == -1 ? false : true;
+    return  shmdt(start) == -1 ? false : true;
 }
 
 sharedMemory::~sharedMemory()
