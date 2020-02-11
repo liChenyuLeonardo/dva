@@ -1,4 +1,4 @@
-#include "processManager.hpp"
+#include "processManager.h"
 // to be improved
 
 processManager::processManager():procList()

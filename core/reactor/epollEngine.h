@@ -1,5 +1,5 @@
-#ifndef EPOLL_HPP_INCLUDED
-#define EPOLL_HPP_INCLUDED
+#ifndef EPOLL_H_INCLUDED
+#define EPOLL_H_INCLUDED
 #include <sys/epoll.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
@@ -11,6 +11,7 @@
 
 using std::vector;
 #define NUM_OF_EVENTS 500 //设定的epoll事件数为500
+#define DEFAULT_TIMEOUT 300 //epoll_wait的等待时间
 
 class epollEngine
 {
@@ -18,7 +19,7 @@ private:
     int epollfd = -1; 
     vector<epoll_event> eventList; //epoll事件容器
     int nfds = 0; //当前epoll侦听的fd数量
-    int timeout = 300; //epoll_wait的等待时间 
+    int timeout = DEFAULT_TIMEOUT; //epoll_wait的等待时间 
     /*选用多进程的锁机制来避免惊群效应*/
 
 public:

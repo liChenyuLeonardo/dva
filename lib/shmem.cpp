@@ -1,4 +1,4 @@
-#include "shmem.hpp"
+#include "shmem.h"
 
 
 sharedMemory::sharedMemory(size_t size):

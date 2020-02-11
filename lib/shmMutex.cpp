@@ -1,4 +1,4 @@
-#include "shmMutex.hpp"
+#include "shmMutex.h"
 
 shmMutex::shmMutex():
 sharedMemory(PAGE_SIZE),mutex(NULL),buffStart(NULL),start(NULL)

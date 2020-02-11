@@ -1,9 +1,9 @@
-#ifndef _PROCESS_MANAGER_HPP_
-#define _PROCESS_MANAGER_HPP_
+#ifndef _PROCESS_MANAGER_H_
+#define _PROCESS_MANAGER_H_
 
 #include <signal.h>
 #include <unistd.h>
-#include "lib/process.hpp"
+#include "lib/process.h"
 
 #define SIG_GENTLE_STOP  SIGINT
 #define SIG_INSTANT_STOP SIGTERM

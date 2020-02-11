@@ -1,4 +1,4 @@
-#include "epollEngine.hpp"
+#include "epollEngine.h"
 
 epollEngine::epollEngine()
 {
@@ -30,7 +30,7 @@ bool epollEngine::epollAddEvent(epoll_event ev)
         return false;
     }
     if( epoll_ctl(this->epollfd, EPOLL_CTL_ADD, ev.data.fd, &ev) == 0 ){
-        ++this->nfds;
+        ++nfds;
         return true;
     }else{
          //add-event failed
@@ -45,7 +45,7 @@ bool epollEngine::epollDelEvent(epoll_event ev)
         return false;
     }
     if( epoll_ctl(this->epollfd, EPOLL_CTL_DEL, ev.data.fd, &ev) == 0 ){
-        --this->nfds;
+        --nfds;
         return true;
     }else{
          //delete-event failed

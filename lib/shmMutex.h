@@ -1,7 +1,7 @@
-#ifndef _SHM_MUTEX_HPP_
-#define _SHM_MUTEX_HPP_
+#ifndef _SHM_MUTEX_H_INCLUDED_
+#define _SHM_MUTEX_H_INCLUDED_
 #define _NONBLOCKING_
-#include "shmem.hpp"
+#include "shmem.h"
 #include <semaphore.h>
 
 

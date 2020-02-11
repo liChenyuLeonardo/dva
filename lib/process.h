@@ -1,5 +1,5 @@
-#ifndef _PROCESS_HPP_INCLUDED_
-#define _PROCESS_HPP_INCLUDED_
+#ifndef _PROCESS_H_INCLUDED_
+#define _PROCESS_H_INCLUDED_
 #include <unistd.h>
 #include <string>
 #include<iostream>

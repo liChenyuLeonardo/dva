@@ -1,10 +1,10 @@
-#include "epollEngine.hpp"
+#include "../core/epollEngine.h"
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <iostream>
 #include <unistd.h>
-#include<string.h>
+#include <string.h>
 using namespace std;
 int main()
 {
@@ -21,6 +21,8 @@ int main()
     bind(listen_sock, (sockaddr*)&serverSock,sizeof(serverSock));
     listen(listen_sock,100); 
     epollEngine test;
+    epoll_event ev = test.setEpollEvent(listen_sock, EPOLLIN | EPOLLET);
+    test.epollAddEvent(ev);
     while(1){
         int nfds = test.epollWait();
         if(nfds == -1){

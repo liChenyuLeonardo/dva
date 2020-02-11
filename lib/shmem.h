@@ -1,5 +1,5 @@
-#ifndef SHMEM_HPP_DEFINED
-#define SHMEM_HPP_DEFINED
+#ifndef SHMEM_H_INCLUDED
+#define SHMEM_H_INCLUDED
 #include <unistd.h>
 #include <string.h>
 #include <sys/shm.h>
