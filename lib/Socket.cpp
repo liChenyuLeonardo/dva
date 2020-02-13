@@ -3,22 +3,21 @@ string Socket::errMsg = "Everything is OK.";
 
 
 Socket::Socket(int socket, socketType type):
-addrlen(sizeof(sockaddr_in)), socketfd(-1), type(UNSPECIFIED)
+addrlen(sizeof(sockaddr_in)), socketfd(socket), type(type)
 {
-    this->socketfd = socket;
-    this->type = type;
+}
+
+Socket::Socket():
+addrlen(sizeof(sockaddr_in)), socketfd(-1), type(CLIENT_SOCKET)
+{
 }
 
 int Socket::Accept()
 {
-    if(socketfd == -1){ 
-        setErrMsg("invalid socket.");
+    if(socketfd == -1) 
         return -1;
-    }
-    if(type == UNSPECIFIED || type == CLIENT_SOCKET){
-        setErrMsg("invalid socket type.");
+    if(type == CLIENT_SOCKET) 
         return -1;
-    }
     return accept(socketfd, (struct sockaddr*)&addr, &addrlen);
 }
 
@@ -32,11 +31,9 @@ return:
 int Socket::Recv(void* buffer, size_t length)
 {
     if(socketfd == -1){ 
-        setErrMsg("invalid socket.");
         return -1;
     }
-    if(type == UNSPECIFIED || type == SERVER_SOCKET){
-        setErrMsg("invalid socket type.");
+    if(type == SERVER_SOCKET){
         return -1;
     }
     size_t bytes_left;
@@ -62,5 +59,5 @@ int Socket::Recv(void* buffer, size_t length)
 
 int Send(void* buffer, size_t bytes)
 {
-
+    
 }

@@ -7,15 +7,13 @@ epollEngine::epollEngine()
 }
 
 
-bool epollEngine::epollInit()
+void epollEngine::epollInit()
 {
     int fd = epoll_create1(0);
     if(fd == -1){
         //epoll create failed
-        return false;
     }
     this->epollfd = fd;
-    return true;
 }
 
 void epollEngine::setEpollTimeout(int timeout)

@@ -20,13 +20,12 @@ private:
     vector<epoll_event> eventList; //epoll事件容器
     int nfds = 0; //当前epoll侦听的fd数量
     int timeout = DEFAULT_TIMEOUT; //epoll_wait的等待时间 
-    /*选用多进程的锁机制来避免惊群效应*/
+    void epollInit();
 
 public:
     epollEngine();
     bool epollAddEvent(epoll_event ev);
     bool epollDelEvent(epoll_event ev);
-    bool epollInit();
     int epollWait();
     epoll_event setEpollEvent(int fd, uint32_t op);
     void setEpollTimeout(int timeout); //设置自定义的epoll延时

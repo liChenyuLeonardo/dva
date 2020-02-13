@@ -2,8 +2,10 @@
 #define _DOUBLE_BUFFERED_QUEUE_H_INCLUDED_
 #include <queue>
 #include <mutex>
+#include <vector>
 using std::queue;
 using std::mutex;
+
 //#define DEFAULT_MAX_EVS 10000
 
 
@@ -28,12 +30,12 @@ public:
     doubleBufferedQueue();
     // writing thread
     void Push(T& val);
+    void Push(vector<T>& val_array, int size); //支持批量写入队列以减少锁的使用
     // reading thread
     T& Read();
     // get total size
     size_t Size();
-    bool isReaderEmpty();
-    bool isWriterEmpty();
+    bool Empty();
 
 };
 
@@ -50,18 +52,24 @@ void doubleBufferedQueue<T>::Push(T& val)
 {
     w_mutex.lock();
     writer->push(val);
-    if(reader->empty()){ 
-        r_mutex.lock();
-        //交换读写队列其实就是交换reader和writer指针
-        queue<T>* t = reader;
-        reader = writer;
-        writer = t;
-        r_mutex.unlock();
+    w_mutex.unlock();
+}
+
+template<class T>
+void doubleBufferedQueue<T>::Push(vector<T>& val_array, int size)
+{
+    w_mutex.lock();
+
+    for(int i = 0; i < size; i++){
+        T& value = val_array[i];
+        writer->push(value);
     }
+
     w_mutex.unlock();
 }
 
 //队列为空时，Read会返回一个T类型变量的引用，该变量的地址空间全部被置零
+//建议在访问队列前先调用Empty()判断队列是否为空
 template<class T>
 T& doubleBufferedQueue<T>::Read()
 {
@@ -91,19 +99,27 @@ T& doubleBufferedQueue<T>::Read()
 template<class T>
 size_t doubleBufferedQueue<T>::Size()
 {
-    return reader->size() + writer->size();
+    return queue1.size()+queue2.size();
 }
 
 template<class T>
-bool doubleBufferedQueue<T>::isReaderEmpty()
+bool doubleBufferedQueue<T>::Empty()
 {
-    return reader->empty();
+    if(queue1.empty() && queue2.empty())
+        return true;
+    else{
+        if(reader->empty()){
+            w_mutex.lock();
+            r_mutex.lock();
+            queue<T>* t = reader;
+            reader = writer;
+            writer = t;
+            w_mutex.unlock();
+            r_mutex.unlock();
+        }
+        return false;
+    }
 }
 
-template<class T>
-bool doubleBufferedQueue<T>::isWriterEmpty()
-{
-    return writer->empty();
-}
 
 #endif

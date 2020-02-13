@@ -5,22 +5,22 @@ using std::string;
 
 struct event_t{
     enum evType{
-        SOCKET_IN = 1,
-        SOCKET_OUT = (1 << 1),
-        DISK_IN = (1 << 2),
-        DISK_OUT = (1 << 3),
+        IN = EPOLL_IN,
+        OUT = EPOLL_OUT,
+        
+        ERROR = (1 << 2),
+        HUP = (1 << 3),
         UNAVAILABLE = (1 << 4)
     };
     int fd;
-    pid_t pid;
     evType eventType;
 
-    event_t(int fd, pid_t pid, evType type):
-    fd(fd),pid(pid),eventType(type){
+    event_t(int fd, evType type):
+    fd(fd),eventType(type){
     }
 
     event_t():
-    fd(-1),pid(-1),eventType(UNAVAILABLE){
+    fd(-1),eventType(UNAVAILABLE){
     }   
 };
 

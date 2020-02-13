@@ -6,25 +6,27 @@
 #include <unistd.h>
 #include <string.h>
 #include <string>
+#include <errno.h>
 using std::string;
-#define setErrMsg(x) errMsg = x
 
 
 enum socketType{
-    CLIENT_SOCKET,SERVER_SOCKET, UNSPECIFIED
+    CLIENT_SOCKET,SERVER_SOCKET
 };
 
 //The creation and initialization of an IPV4 socket
 class Socket
 {
 private:
-    int socketfd = -1;
-    socketType type = UNSPECIFIED;
+    int socketfd;
+    socketType type;
     socklen_t addrlen;
     sockaddr_in addr;
     /*---------------------------*/
 
 public:
+    Socket();
+    static extern int errno;
     static string errMsg;
     Socket(int socket, socketType type);
     int Accept();
