@@ -2,9 +2,9 @@
 #define _ACCEPTOR_H_INCLUDED_
 #include "epollEngine.h"
 #include "doubleBufferedQueue.h"
-#include "../lib/Socket.h"
+#include "../../lib/Socket.h" //记得改makefile，不要使用这样的路径名
 #include <thread>
-#include "../lib/type.h"
+#include "../../lib/type.h" //记得改makefile，不要使用这样的路径名
 
 class Acceptor
 {

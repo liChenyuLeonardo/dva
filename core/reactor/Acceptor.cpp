@@ -12,7 +12,12 @@ void Acceptor::AcceptorCycle()
     Socket conn_sock;
     int accept_sock = -1;
     epoll_event temp;
-
+    if(serverSocket == -1){
+        //log: invalid serverSocket
+        return;
+    }
+    temp = IOMultiplexer.setEpollEvent(serverSocket, EPOLLIN | EPOLLET);
+    IOMultiplexer.epollAddEvent(temp); //将监听socket添加入epoll中，监听socket设为ET
     //main circle
     while(true){
         if((size=IOMultiplexer.epollWait()) == 0) goto check;
@@ -28,7 +33,7 @@ void Acceptor::AcceptorCycle()
                 if(val.data.fd == serverSocket){
                     conn_sock.changeSocket(serverSocket, SERVER_SOCKET);
                     while((accept_sock=conn_sock.Accept()) > 0){
-                        temp = IOMultiplexer.setEpollEvent(accept_sock, EPOLL_IN | EPOLL_ET);
+                        temp = IOMultiplexer.setEpollEvent(accept_sock, EPOLLIN | EPOLLET);
                         IOMultiplexer.epollAddEvent(temp);
                     }
 
