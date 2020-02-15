@@ -5,8 +5,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
-#include <string>
 #include <errno.h>
+#include <string>
 using std::string;
 
 
@@ -26,18 +26,18 @@ private:
 
 public:
     Socket();
-    static extern int errno;
-    static string errMsg;
+    int errno;
     Socket(int socket, socketType type);
     int Accept();
     int Send(void* buffer, size_t bytes);
     int Recv(void* buffer, size_t bytes);
-    bool Connect();
     bool Close();
     void changeSocket(int socket, socketType type);
-    static int initListenSocket(string IPV4_addr = "", int port = 0);
-    static int initClientSocket();
-    ~Socket();
+    sockaddr_in getAddr();
+    //用于初始化一个侦听socket
+    static int initListenSocket(string IPV4_addr = "", int port = -1, int nfds = 0);
+    //static int initClientSocket();
+    ~Socket() = default;
 };
 
 #endif

@@ -59,5 +59,38 @@ int Socket::Recv(void* buffer, size_t length)
 
 int Send(void* buffer, size_t bytes)
 {
-    
+    //to be continue
+    return 0;
+}
+
+bool Socket::Close()
+{
+    if(socketfd == -1) return true;
+    return close(fd) == -1? false : true;
+}
+
+void Socket::changeSocket(int socket, socketType type)
+{
+    this->socketfd = socket;
+    this->type = type;
+}
+
+sockaddr_in Socket::getAddr()
+{
+    return addr;
+}
+
+int Socket::initListenSocket(string IPV4_addr = "", int port = -1, int nfds = 0)
+{
+    int listen_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if(listen_sock < 0) return -1;
+    sockaddr_in serverSock;
+    memset(&serverSock, 0, sizeof(serverSock));
+    serverSock.sin_family = AF_INET;
+    serverSock.sin_addr.s_addr = inet_addr(IPV4_addr.c_str());
+    serverSock.sin_port = htons(port);
+    if(bind(listen_sock, (sockaddr*)&serverSock,sizeof(serverSock)) < 0) 
+        return -1;
+    if(listen(listen_sock,nfds) < 0)
+        return -1;
 }
