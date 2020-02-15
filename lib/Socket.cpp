@@ -66,7 +66,7 @@ int Send(void* buffer, size_t bytes)
 bool Socket::Close()
 {
     if(socketfd == -1) return true;
-    return close(fd) == -1? false : true;
+    return close(socketfd) == -1? false : true;
 }
 
 void Socket::changeSocket(int socket, socketType type)

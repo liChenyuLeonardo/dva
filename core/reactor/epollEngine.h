@@ -16,10 +16,10 @@ using std::vector;
 class epollEngine
 {
 private:
-    int epollfd = -1; 
+    int epollfd; 
     vector<epoll_event> eventList; //epoll事件容器
-    int nfds = 0; //当前epoll侦听的fd数量
-    int timeout = DEFAULT_TIMEOUT; //epoll_wait的等待时间 
+    int nfds; //当前epoll侦听的fd数量
+    int timeout; //epoll_wait的等待时间 
     void epollInit();
 
 public:

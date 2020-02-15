@@ -1,6 +1,7 @@
 #include "epollEngine.h"
 
-epollEngine::epollEngine()
+epollEngine::epollEngine():
+epollfd(-1), eventList(), nfds(0), timeout(DEFAULT_TIMEOUT)
 {
     this->eventList.resize(NUM_OF_EVENTS); //以NUM_OF_EVENTS作为单位对evenList进行扩容
     epollInit(); // 初始化epoll
