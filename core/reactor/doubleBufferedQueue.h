@@ -5,6 +5,7 @@
 #include <vector>
 using std::queue;
 using std::mutex;
+using std::vector;
 
 //#define DEFAULT_MAX_EVS 10000
 

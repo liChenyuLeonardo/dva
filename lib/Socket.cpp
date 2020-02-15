@@ -1,5 +1,4 @@
 #include "Socket.h"
-string Socket::errMsg = "Everything is OK.";
 
 
 Socket::Socket(int socket, socketType type):
@@ -80,7 +79,7 @@ sockaddr_in Socket::getAddr()
     return addr;
 }
 
-int Socket::initListenSocket(string IPV4_addr = "", int port = -1, int nfds = 0)
+int Socket::initListenSocket(string IPV4_addr, int port, int nfds)
 {
     int listen_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if(listen_sock < 0) return -1;

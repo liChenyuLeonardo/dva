@@ -2,9 +2,9 @@
 #define _ACCEPTOR_H_INCLUDED_
 #include "epollEngine.h"
 #include "doubleBufferedQueue.h"
-#include "lib/Socket.h"
+#include "../lib/Socket.h"
 #include <thread>
-#include "lib/type.h"
+#include "../lib/type.h"
 
 class Acceptor
 {
