@@ -45,7 +45,7 @@ void Acceptor::AcceptorCycle()
                         this->IOMultiplexer.epollAddEvent(temp);
                     }
 
-                    if (conn_sock.errno != EAGAIN && conn_sock.errno != ECONNABORTED && conn_sock.errno != EPROTO && conn_sock.errno != EINTR){
+                    if (errno != EAGAIN && errno != ECONNABORTED && errno != EPROTO && errno != EINTR){
                         this->status = -1;
                         cout<< "accept error" << endl;
                     }
