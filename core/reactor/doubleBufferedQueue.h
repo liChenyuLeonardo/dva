@@ -75,9 +75,6 @@ template<class T>
 T& doubleBufferedQueue<T>::Read()
 {
     r_mutex.lock();//除非交换读写队列，否则这个读锁不会被其他线程占用
-    T& temp = reader->front();
-    if(!reader->empty())
-        reader->pop();
     //读队列为空时交换读写队列
     if(reader->empty()){ 
         if(!writer->empty()){ 
@@ -91,8 +88,10 @@ T& doubleBufferedQueue<T>::Read()
             w_mutex.unlock();
         }
     }
+    T& temp = reader->front();
+    if(!reader->empty())
+        reader->pop();
     r_mutex.unlock();
-
     return temp;
 }
 
@@ -106,20 +105,7 @@ size_t doubleBufferedQueue<T>::Size()
 template<class T>
 bool doubleBufferedQueue<T>::Empty()
 {
-    if(queue1.empty() && queue2.empty())
-        return true;
-    else{
-        if(reader->empty()){
-            w_mutex.lock();
-            r_mutex.lock();
-            queue<T>* t = reader;
-            reader = writer;
-            writer = t;
-            w_mutex.unlock();
-            r_mutex.unlock();
-        }
-        return false;
-    }
+    return (queue1.empty() && queue2.empty());
 }
 
 
