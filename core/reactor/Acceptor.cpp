@@ -1,5 +1,10 @@
 #include "Acceptor.h"
 
+/*---调试用 ---*/
+#include<iostream>
+using std::cout;
+using std::endl;
+
 Acceptor::Acceptor(epollEngine& ep, doubleBufferedQueue<epoll_event>& q, int s):
 IOMultiplexer(ep), IOQueue(q), serverSocket(s), status(0)
 {
@@ -20,10 +25,13 @@ void Acceptor::AcceptorCycle()
     IOMultiplexer.epollAddEvent(temp); //将监听socket添加入epoll中，监听socket设为ET
     //main circle
     while(true){
-        if((size=IOMultiplexer.epollWait()) == 0) goto check;
+        if((size=IOMultiplexer.epollWait()) == 0){
+	    cout << "empty set" << endl;
+	    goto check;
+	}
         else if(size < 0){
             status = -1;
-            //log: IOMultiplexer exit with error, perror()
+            cout << "epollWait failed!"<<endl;
             break;
         }
         else{
@@ -39,7 +47,7 @@ void Acceptor::AcceptorCycle()
 
                     if (errno != EAGAIN && errno != ECONNABORTED && errno != EPROTO && errno != EINTR){
                         status = -1;
-                        //log: Accept Error, perror()
+                        cout<< "accept error" << endl;
                     }
                     break;
                 }
@@ -48,7 +56,7 @@ void Acceptor::AcceptorCycle()
     check:
         if(status < 0) break;
     }
-    
+    cout<< "Acceptro main thread exited!"<<endl;
 }
 
 void Acceptor::run()
