@@ -54,6 +54,6 @@ void Acceptor::AcceptorCycle()
 void Acceptor::run()
 {
     status = 0;
-    std::thread AcceptorThread(AcceptorCycle);
+    std::thread AcceptorThread(&Acceptor::AcceptorCycle, this);
     AcceptorThread.detach();
 }
