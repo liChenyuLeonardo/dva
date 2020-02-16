@@ -19,6 +19,12 @@ void Acceptor::AcceptorCycle()
     epoll_event temp;
     if(this->serverSocket == -1){
         //log: invalid serverSocket
+        this->status = -1;
+        return;
+    }
+    if(!Socket::setNonblockingSocket(serverSocket)){
+        this->status = -1;
+        //log: failed to set non-blocking socket perror()
         return;
     }
     temp = this->IOMultiplexer.setEpollEvent(this->serverSocket, EPOLLIN | EPOLLET);
@@ -42,10 +48,10 @@ void Acceptor::AcceptorCycle()
                 if(events[i].data.fd == this->serverSocket){
                     conn_sock.changeSocket(this->serverSocket, SERVER_SOCKET);
                     while((accept_sock=conn_sock.Accept()) > 0){
+                        Socket::setNonblockingSocket(accept_sock);
                         temp = this->IOMultiplexer.setEpollEvent(accept_sock, EPOLLIN | EPOLLET);
                         this->IOMultiplexer.epollAddEvent(temp);
                     }
-
                     if (errno != EAGAIN && errno != ECONNABORTED && errno != EPROTO && errno != EINTR){
                         this->status = -1;
                         perror("accept error");

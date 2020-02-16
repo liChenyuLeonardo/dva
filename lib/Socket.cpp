@@ -94,3 +94,8 @@ int Socket::initListenSocket(string IPV4_addr, int port, int nfds)
         return -1;
     return listen_sock;	
 }
+
+bool Socket::setNonblockingSocket(int socket)
+{
+    return ioctl(socket, FIONBIO, 1);
+}

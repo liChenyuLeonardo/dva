@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/ioctl.h>
 #include <string>
 using std::string;
 
@@ -36,6 +37,7 @@ public:
     sockaddr_in getAddr();
     //用于初始化一个侦听socket
     static int initListenSocket(string IPV4_addr = "", int port = -1, int nfds = 0);
+    static bool setNonblockingSocket(int fd);
     //static int initClientSocket();
     ~Socket() = default;
 };
