@@ -35,10 +35,11 @@ void Acceptor::AcceptorCycle()
             break;
         }
         else{
+            cout << "接收到"<< size <<"个新连接" << endl;
             vector<epoll_event>& events = this->IOMultiplexer.getEventList();
             this->IOQueue.Push(events, size);
-            for(auto& val : events){
-                if(val.data.fd == this->serverSocket){
+            for(int i = 0; i < size; ++i){
+                if(events[i].data.fd == this->serverSocket){
                     conn_sock.changeSocket(this->serverSocket, SERVER_SOCKET);
                     while((accept_sock=conn_sock.Accept()) > 0){
                         temp = this->IOMultiplexer.setEpollEvent(accept_sock, EPOLLIN | EPOLLET);
@@ -56,7 +57,7 @@ void Acceptor::AcceptorCycle()
     check:
         if(this->status < 0) break;
     }
-    cout<< "Acceptro main thread exited!"<<endl;
+    cout<< "Acceptor main thread exited!"<<endl;
 }
 
 void Acceptor::run()
