@@ -31,9 +31,9 @@ void Acceptor::AcceptorCycle()
     this->IOMultiplexer.epollAddEvent(temp); //将监听socket添加入epoll中，监听socket设为ET
     //main circle
     while(this->status >= 0){
-        if((size=this->IOMultiplexer.epollWait()) == 0){
+    	size = this->IOMultiplexer.epollWait();
+        if(size == 0){
 	    cout << "empty set" << endl;
-	    goto check;
 	}
         else if(size < 0){
             this-> status = -1;
@@ -51,8 +51,10 @@ void Acceptor::AcceptorCycle()
                         Socket::setNonblockingSocket(accept_sock);
                         temp = this->IOMultiplexer.setEpollEvent(accept_sock, EPOLLIN | EPOLLET);
                         this->IOMultiplexer.epollAddEvent(temp);
+			cout << "add socket "<<accept_sock<< " to epoll" << endl;
                     }
-                    if (errno != EAGAIN && errno != ECONNABORTED && errno != EPROTO && errno != EINTR){
+		    cout << "done with handling all of the sockets" << endl;
+                    if (errno != EAGAIN){
                         this->status = -1;
                         perror("accept error");
                     }
@@ -60,8 +62,6 @@ void Acceptor::AcceptorCycle()
                 }
             }
         }
-    check:
-        if(this->status < 0) break;
     }
     cout<< "Acceptor main thread exited!"<<endl;
 }

@@ -2,12 +2,13 @@
 #include <iostream>
 #include <thread>
 #include <unistd.h>
+#include <string>
 using namespace std;
 struct event_t
 {
     int pid;
-    char msg[100]; 
-    event_t():msg(" Hello world!"),pid(0){}
+    string msg; 
+    event_t():msg("Hello World!"),pid(0){}
 };
 
 void consumer(doubleBufferedQueue<event_t>& haha)
@@ -17,7 +18,7 @@ void consumer(doubleBufferedQueue<event_t>& haha)
         if(haha.Empty())
             cout << "tid: "<<std::this_thread::get_id()<<" found that reader queue is empty" << endl;
         else{
-            cout << "tid: "<<std::this_thread::get_id()<< haha.Read().msg << endl;
+            cout << "tid: "<<std::this_thread::get_id()<< haha.Read().msg <<" size =  "<< haha.Size() << endl;
         }
         
     }
@@ -28,6 +29,8 @@ void producer(doubleBufferedQueue<event_t>& haha)
     for(int i = 0; i < 20; i++){
         usleep(300);
         event_t event;
+	event.msg = "fuck you!";
+	event.pid = 0;
         haha.Push(event);
         cout << "tid: "<<std::this_thread::get_id()<< " insert into writer queue" << endl;
 

@@ -97,5 +97,6 @@ int Socket::initListenSocket(string IPV4_addr, int port, int nfds)
 
 bool Socket::setNonblockingSocket(int socket)
 {
-    return ioctl(socket, FIONBIO, 1);
+    int flags = fcntl(socket, F_GETFL, 0);
+    fcntl(socket, F_SETFL, flags|O_NONBLOCK);
 }

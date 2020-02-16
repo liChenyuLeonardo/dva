@@ -4,8 +4,12 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <iostream>
+#include <string>
+using namespace std;
 int main(){
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < 5; i++){
     //创建套接字
     fork();
     int sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -19,7 +23,15 @@ int main(){
             perror("connection failed");
             break;
         }
-        usleep(300);
+	cout << "Process "<<getpid()<<" successfully established connection!"<<endl;
+	string msg = "hello from ";
+	msg += (int)getpid();
+	for(int j = 0; j < 10; j++){
+	    if(send(sock, msg.c_str(), (int)msg.size(), 0) <= 0){
+	    	perror("send msg error");
+	    }
+	    sleep(1);
+	}
         //关闭套接字
         close(sock);
     }

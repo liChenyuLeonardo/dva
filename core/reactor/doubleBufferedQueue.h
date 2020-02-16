@@ -33,7 +33,7 @@ public:
     void Push(T& val);
     void Push(vector<T>& val_array, int size); //支持批量写入队列以减少锁的使用
     // reading thread
-    T& Read();
+    T Read();
     // get total size
     size_t Size();
     bool Empty();
@@ -62,8 +62,8 @@ void doubleBufferedQueue<T>::Push(vector<T>& val_array, int size)
     w_mutex.lock();
 
     for(int i = 0; i < size; i++){
-        T& value = val_array[i];
-        writer->push(value);
+    //    T& value = val_array[i];
+        writer->push(val_array[i]);
     }
 
     w_mutex.unlock();
@@ -72,7 +72,7 @@ void doubleBufferedQueue<T>::Push(vector<T>& val_array, int size)
 //队列为空时，Read会返回一个T类型变量的引用，该变量的地址空间全部被置零
 //建议在访问队列前先调用Empty()判断队列是否为空
 template<class T>
-T& doubleBufferedQueue<T>::Read()
+T doubleBufferedQueue<T>::Read()
 {
     r_mutex.lock();//除非交换读写队列，否则这个读锁不会被其他线程占用
     //读队列为空时交换读写队列
@@ -88,7 +88,7 @@ T& doubleBufferedQueue<T>::Read()
             w_mutex.unlock();
         }
     }
-    T& temp = reader->front();
+    T temp = reader->front();
     if(!reader->empty())
         reader->pop();
     r_mutex.unlock();
