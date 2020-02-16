@@ -14,6 +14,7 @@ private:
     int serverSocket;
     int status;
     //禁用拷贝构造函数
+    Acceptor() = delete;
     Acceptor(const Acceptor&) = delete;
     Acceptor& operator= (const Acceptor&) = delete;
 

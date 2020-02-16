@@ -17,15 +17,15 @@ void Acceptor::AcceptorCycle()
     Socket conn_sock;
     int accept_sock = -1;
     epoll_event temp;
-    if(serverSocket == -1){
+    if(this->serverSocket == -1){
         //log: invalid serverSocket
         return;
     }
-    temp = IOMultiplexer.setEpollEvent(serverSocket, EPOLLIN | EPOLLET);
-    IOMultiplexer.epollAddEvent(temp); //将监听socket添加入epoll中，监听socket设为ET
+    temp = this->IOMultiplexer.setEpollEvent(this->serverSocket, EPOLLIN | EPOLLET);
+    this->IOMultiplexer.epollAddEvent(temp); //将监听socket添加入epoll中，监听socket设为ET
     //main circle
     while(true){
-        if((size=IOMultiplexer.epollWait()) == 0){
+        if((size=this->IOMultiplexer.epollWait()) == 0){
 	    cout << "empty set" << endl;
 	    goto check;
 	}
@@ -35,18 +35,18 @@ void Acceptor::AcceptorCycle()
             break;
         }
         else{
-            vector<epoll_event>& events = IOMultiplexer.getEventList();
-            IOQueue.Push(events, size);
+            vector<epoll_event>& events = this->IOMultiplexer.getEventList();
+            this->IOQueue.Push(events, size);
             for(auto& val : events){
-                if(val.data.fd == serverSocket){
-                    conn_sock.changeSocket(serverSocket, SERVER_SOCKET);
+                if(val.data.fd == this->serverSocket){
+                    conn_sock.changeSocket(this->serverSocket, SERVER_SOCKET);
                     while((accept_sock=conn_sock.Accept()) > 0){
-                        temp = IOMultiplexer.setEpollEvent(accept_sock, EPOLLIN | EPOLLET);
-                        IOMultiplexer.epollAddEvent(temp);
+                        temp = this->IOMultiplexer.setEpollEvent(accept_sock, EPOLLIN | EPOLLET);
+                        this->IOMultiplexer.epollAddEvent(temp);
                     }
 
-                    if (errno != EAGAIN && errno != ECONNABORTED && errno != EPROTO && errno != EINTR){
-                        status = -1;
+                    if (conn_sock.errno != EAGAIN && conn_sock.errno != ECONNABORTED && conn_sock.errno != EPROTO && conn_sock.errno != EINTR){
+                        this->status = -1;
                         cout<< "accept error" << endl;
                     }
                     break;
@@ -54,7 +54,7 @@ void Acceptor::AcceptorCycle()
             }
         }
     check:
-        if(status < 0) break;
+        if(this->status < 0) break;
     }
     cout<< "Acceptro main thread exited!"<<endl;
 }
