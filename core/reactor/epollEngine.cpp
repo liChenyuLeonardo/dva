@@ -63,7 +63,6 @@ epoll_event epollEngine::setEpollEvent(int fd, uint32_t op)
 int epollEngine::epollWait()
 {
     int ret = epoll_wait(epollfd, &*eventList.begin(),(int)eventList.size(), this->timeout);
-    this->nfds = ret;
         if(ret < 0){
             //epoll_wait failed
             return ret;

@@ -92,5 +92,5 @@ int Socket::initListenSocket(string IPV4_addr, int port, int nfds)
         return -1;
     if(listen(listen_sock,nfds) < 0)
         return -1;
-    return 1;	
+    return listen_sock;	
 }

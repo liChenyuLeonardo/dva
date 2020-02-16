@@ -12,9 +12,9 @@ int main()
         perror("socket init error");
         return 0;
     }
+    cout << "The socket is " << serverSocket <<endl;
     Acceptor acceptor_instance(epoll_instance, queue_instance, serverSocket);
     acceptor_instance.run(); // off you go
-    int a;
     while(true){
         if(queue_instance.Empty()){
             cout << "queue is fucking empty" << endl; 
