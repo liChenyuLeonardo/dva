@@ -24,6 +24,7 @@ int main()
         epoll_event temp;
         temp = queue_instance.Read();
         cout << "new socket received! fd is " << temp.data.fd << endl;
+	//close(temp.data.fd);
     }
     return 0;
 }

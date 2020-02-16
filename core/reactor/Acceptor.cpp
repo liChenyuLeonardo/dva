@@ -24,13 +24,13 @@ void Acceptor::AcceptorCycle()
     temp = this->IOMultiplexer.setEpollEvent(this->serverSocket, EPOLLIN | EPOLLET);
     this->IOMultiplexer.epollAddEvent(temp); //将监听socket添加入epoll中，监听socket设为ET
     //main circle
-    while(true){
+    while(this->status >= 0){
         if((size=this->IOMultiplexer.epollWait()) == 0){
 	    cout << "empty set" << endl;
 	    goto check;
 	}
         else if(size < 0){
-            status = -1;
+            this-> status = -1;
             cout << "epollWait failed!"<<endl;
             break;
         }
@@ -48,7 +48,7 @@ void Acceptor::AcceptorCycle()
 
                     if (errno != EAGAIN && errno != ECONNABORTED && errno != EPROTO && errno != EINTR){
                         this->status = -1;
-                        cout<< "accept error" << endl;
+                        perror("accept error");
                     }
                     break;
                 }
