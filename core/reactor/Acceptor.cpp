@@ -1,9 +1,9 @@
 #include "Acceptor.h"
 
 /*---调试用 ---*/
-#include<iostream>
-using std::cout;
-using std::endl;
+//#include<iostream>
+//using std::cout;
+//using std::endl;
 
 Acceptor::Acceptor(epollEngine& ep, doubleBufferedQueue<epoll_event>& q, int s):
 IOMultiplexer(ep), IOQueue(q), serverSocket(s), status(0)
@@ -28,15 +28,15 @@ void Acceptor::AcceptorCycle()
     while(this->status >= 0){
     	size = this->IOMultiplexer.epollWait();
         if(size == 0){
-	    cout << "empty set" << endl;
+	    //cout << "empty set" << endl;
 	}
         else if(size < 0){
             this-> status = -1;
-            cout << "epollWait failed!"<<endl;
+            //cout << "epollWait failed!"<<endl;
             break;
         }
         else{
-            cout << "接收到"<< size <<"个新连接" << endl;
+            //cout << "接收到"<< size <<"个新连接" << endl;
             vector<epoll_event>& events = this->IOMultiplexer.getEventList();
             this->IOQueue.Push(events, size);
             for(int i = 0; i < size; ++i){
@@ -46,12 +46,12 @@ void Acceptor::AcceptorCycle()
                         Socket::setNonblockingSocket(accept_sock);
                         temp = this->IOMultiplexer.setEpollEvent(accept_sock, EPOLLIN | EPOLLET);
                         this->IOMultiplexer.epollAddEvent(temp);
-			cout << "add socket "<<accept_sock<< " to epoll" << endl;
+			//cout << "add socket "<<accept_sock<< " to epoll" << endl;
                     }
-		    cout << "done with handling all of the sockets" << endl;
+		   // cout << "done with handling all of the sockets" << endl;
                     if (errno != EAGAIN){
                         this->status = -1;
-                        perror("accept error");
+                        //perror("accept error");
                     }
                     break;
                 }
