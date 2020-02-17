@@ -27,8 +27,8 @@ int main()
         cout << "new socket received! fd is " << temp.data.fd <<  endl;
 	char buffer[1024];
 	if(temp.data.fd != serverSocket){
-	   Socket haha(temp.data.fd, CLIENT_SOCKET);
-	   if(haha.Recv((void*)buffer, 1024) > 0)
+	  // Socket haha(temp.data.fd, CLIENT_SOCKET);
+	   if(recv(temp.data.fd ,(void*)buffer, 1024, 0) > 0)
 	   	cout << buffer << endl;
 	//close(temp.data.fd);
 	}

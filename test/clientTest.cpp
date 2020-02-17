@@ -25,7 +25,7 @@ int main(){
         }
 	cout << "Process "<<getpid()<<" successfully established connection!"<<endl;
 	string msg = "hello from ";
-	msg += (int)getpid();
+	msg += to_string((int)getpid());
 	for(int j = 0; j < 10; j++){
 	    if(send(sock, msg.c_str(), (int)msg.size(), 0) <= 0){
 	    	perror("send msg error");

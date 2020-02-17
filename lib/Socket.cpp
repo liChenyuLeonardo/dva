@@ -41,7 +41,7 @@ int Socket::Recv(void* buffer, size_t length)
     char* current = (char*)buffer;
     while(bytes_left > 0)
     {
-        bytes_read = recv(socketfd,(void*)current,bytes_read, MSG_DONTWAIT); //non-blocking recv()
+        bytes_read = recv(socketfd,(void*)current,bytes_read, 0); //non-blocking recv()
         if(bytes_read < 0)
         {
             if(errno == EINTR)

@@ -58,7 +58,7 @@ void Acceptor::AcceptorCycle()
             }
         }
     }
-    cout<< "Acceptor main thread exited!"<<endl;
+   // cout<< "Acceptor main thread exited!"<<endl;
 }
 
 void Acceptor::run()
