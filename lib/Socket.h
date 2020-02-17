@@ -36,7 +36,7 @@ public:
     void changeSocket(int socket, socketType type);
     sockaddr_in getAddr();
     //用于初始化一个侦听socket
-    static int initListenSocket(string IPV4_addr = "", int port = -1, int nfds = 0);
+    static int initListenSocket(string IPV4_addr = "", int port = -1, int nfds = 0, int flags = 0);
     static bool setNonblockingSocket(int fd);
     //static int initClientSocket();
     ~Socket() = default;
