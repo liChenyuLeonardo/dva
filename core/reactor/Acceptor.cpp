@@ -22,11 +22,6 @@ void Acceptor::AcceptorCycle()
         this->status = -1;
         return;
     }
-    if(!Socket::setNonblockingSocket(serverSocket)){
-        this->status = -1;
-        //log: failed to set non-blocking socket perror()
-        return;
-    }
     temp = this->IOMultiplexer.setEpollEvent(this->serverSocket, EPOLLIN | EPOLLET);
     this->IOMultiplexer.epollAddEvent(temp); //将监听socket添加入epoll中，监听socket设为ET
     //main circle

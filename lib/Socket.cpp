@@ -78,11 +78,15 @@ sockaddr_in Socket::getAddr()
 {
     return addr;
 }
-
-int Socket::initListenSocket(string IPV4_addr, int port, int nfds)
+/*
+flags: 1->Non-blocking
+       0->Blocking(default)
+*/
+int Socket::initListenSocket(string IPV4_addr, int port, int nfds , int flags = 0)
 {
     int listen_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if(listen_sock < 0) return -1;
+    if(flags == 1) setNonblockingSocket(listen_sock);
     sockaddr_in serverSock;
     memset(&serverSock, 0, sizeof(serverSock));
     serverSock.sin_family = AF_INET;

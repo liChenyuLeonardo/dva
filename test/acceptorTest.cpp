@@ -7,7 +7,7 @@ int main()
 {
     epollEngine epoll_instance;
     doubleBufferedQueue<epoll_event> queue_instance;
-    int serverSocket = Socket::initListenSocket("127.0.0.1", 1234, 1000);
+    int serverSocket = Socket::initListenSocket("127.0.0.1", 1234, 1000, 1);
     if(serverSocket < 0){
         perror("socket init error");
         return 0;
