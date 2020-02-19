@@ -18,7 +18,7 @@ void consumer(doubleBufferedQueue<event_t>& haha)
         if(haha.Empty())
             cout << "tid: "<<std::this_thread::get_id()<<" found that reader queue is empty" << endl;
         else{
-            cout << "tid: "<<std::this_thread::get_id()<< haha.Read().msg <<" size =  "<< haha.Size() << endl;
+            cout << "tid: "<<std::this_thread::get_id() << " " << haha.Read().msg <<" size =  "<< haha.Size() << endl;
         }
         
     }
