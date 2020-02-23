@@ -33,7 +33,7 @@ public:
     void Push(T& val);
     void Push(vector<T>& val_array, int size); //支持批量写入队列以减少锁的使用
     // reading thread
-    T&& Read();
+    T Read();
     // get total size
     size_t Size();
     bool Empty();
@@ -83,7 +83,7 @@ T doubleBufferedQueue<T>::Read()
             //交换队列时需要锁住读写队列
             //这里已经锁住读队列了，因此只需要获取写队列的锁
             //w_mutex.lock();
-            std::lock_guard<mutex> w_lock(w_mutex)
+            std::lock_guard<mutex> w_lock(w_mutex);
             //交换读写队列其实就是交换reader和writer指针
             queue<T>* t = reader;
             reader = writer;
@@ -91,7 +91,7 @@ T doubleBufferedQueue<T>::Read()
            // w_mutex.unlock();
         }
     }
-    T&& temp = std::move(reader->front());
+    T temp = reader->front();
     if(!reader->empty())
         reader->pop();
    // r_mutex.unlock();
