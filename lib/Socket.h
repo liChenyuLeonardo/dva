@@ -16,6 +16,7 @@ enum socketType{
 };
 
 //The creation and initialization of an IPV4 socket
+//注意：这个类只能对非阻塞socket进行操作
 class Socket
 {
 private:

@@ -44,7 +44,7 @@ int Socket::Recv(void* buffer, size_t length)
         bytes_read = recv(socketfd,(void*)current,bytes_read, 0); //non-blocking recv()
         if(bytes_read < 0)
         {
-            if(errno == EINTR)
+            if(errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
                 bytes_read = 0;
             else
                 return -1;
