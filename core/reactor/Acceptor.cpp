@@ -43,6 +43,7 @@ void Acceptor::AcceptorCycle()
                 if(events[i].data.fd == this->serverSocket){
                     conn_sock.changeSocket(this->serverSocket, SERVER_SOCKET);
                     while((accept_sock=conn_sock.Accept()) > 0){
+                        //epoll et mode
                         Socket::setNonblockingSocket(accept_sock);
                         temp = this->IOMultiplexer.setEpollEvent(accept_sock, EPOLLIN | EPOLLET);
                         this->IOMultiplexer.epollAddEvent(temp);

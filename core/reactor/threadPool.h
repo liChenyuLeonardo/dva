@@ -1,7 +1,5 @@
 #ifndef _THREAD_POOL_H_INCLUDED_
 #define _THREAD_POOL_H_INCLUDED_
-#ifndef THREAD_POOL_H
-#define THREAD_POOL_H
 //https://github.com/progschj/ThreadPool
 #include <vector>
 #include <queue>
@@ -20,6 +18,9 @@ public:
     auto enqueue(F&& f, Args&&... args) 
         -> std::future<typename std::result_of<F(Args...)>::type>;
     ~threadPool();
+    threadPool() = delete;
+    threadPool(const threadPool&) = delete;
+    threadPool& operator= (const threadPool&) = delete;
 private:
     // need to keep track of threads so we can join them
     std::vector< std::thread > workers;
@@ -96,7 +97,4 @@ inline threadPool::~threadPool()
     for(std::thread &worker: workers)
         worker.join();
 }
-
-#endif
-
 #endif
